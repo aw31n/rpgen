@@ -15,12 +15,6 @@ python -m venv <path>/rpgen
 source <path>/rpgen/bin/activate # bash
 ```
 
-Change directory to <root>/rpgen
-
-```
-cd rpgen
-```
-
 Install packages
 
 ```
@@ -43,7 +37,7 @@ python manage.py createsuperuser
 ### Frontend / React
 
 ```
-cd rpgen/frontend
+cd frontend
 
 # If you're using Yarn
 yarn
