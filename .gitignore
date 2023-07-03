@@ -1,0 +1,12 @@
+db.sqlite3
+.idea/
+__pycache__/
+*.py[cod]
+node_modules/
+frontend/static/
+api/requests/
+cert.crt
+cert.key
+cert.pem
+key.pem
+/env/
