@@ -15,13 +15,13 @@ const useAxios = () => {
 
     axiosInstance.interceptors.request.use(async (req) => {
         if (!isAccessTokenExpired(accessToken)) return req;
-
+        console.log("req", req)
         try {
             const response = await getRefreshToken(refreshToken);
 
             setAuthUser(response.access, response.refresh);
 
-            req.headers.Authorization = `Bearer ${response.data.access}`;
+            req.headers.Authorization = `Bearer ${response.access}`;
             return req;
         }
         catch (e) {

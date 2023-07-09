@@ -44,6 +44,7 @@ export default class Character {
         this.gender = data.gender || ''
         this.weapon = data.weapon || ''
         this.prompt = data.prompt || ''
+        this.image_prompt = data.image_prompt || ''
         this.character_class = data.character_class || ''
         if (data.owner) {
             if (typeof data.owner === 'object')
@@ -115,11 +116,46 @@ export default class Character {
         return prompt
     }
 
+    createImagePrompt() {
+
+        if (!this.id)
+            throw "Save your character first"
+
+        if (!this.race)
+            throw "Can't create image without race"
+
+        if (!this.character_class)
+            throw "Can't create image without class"
+
+        if (!this.gender)
+            throw "Can't create image without gender"
+
+        if (!this.weapon)
+            throw "Can't create an image without a weapon"
+
+        let races = this.race.split(",")
+        let classes = this.character_class.split(",")
+        
+        prompt = "A " + this.gender + " " + races.join(" and ") + " "
+        prompt += classes.join(" and ") + " with a " + this.weapon.split(",").join(" and ")
+
+        prompt += ", epic battle scene, hyperrealistic"
+        return prompt
+    }
+
     async createStory(prompt = null) {
         if (!prompt)
             prompt = this.createStoryPrompt()
         let result = await api.post('openai/story/', new URLSearchParams({ "prompt": prompt }).toString(), )
         console.log(result.data)
         return result.data.story
+    }
+
+    async createImage(prompt = null) {
+        if (!prompt)
+            prompt = this.createImagePrompt()
+        let result = await api.post('openai/image/', new URLSearchParams({ "character_id": this.id, "prompt": prompt }).toString(), )
+        console.log(result.data)
+        return result.data
     }
 }

@@ -10,3 +10,6 @@ cert.key
 cert.pem
 key.pem
 /env/
+/api/ml/data/
+classify.png
+temp.png

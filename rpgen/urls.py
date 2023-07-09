@@ -23,5 +23,5 @@ urlpatterns = static("images", document_root=Path.cwd() / "frontend/static/image
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('', include('frontend.urls')),
-   re_path(r'^(?:.*)/?', include('frontend.urls')),
+    re_path(r'^(?:.*)/?', include('frontend.urls')),
 ] 

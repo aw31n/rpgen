@@ -76,4 +76,17 @@ class UserSerializer(serializers.ModelSerializer):
 class CharacterImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = CharacterImage
-        fields = ('id', 'filename', 'prompt', 'created')
+        fields = ('id', 'character', 'owner', 'filename', 'prompt', 'created')
+
+    def validate(self, attrs):
+        errors = {}
+
+        character = Character.objects.get(id=attrs["character"])
+
+        if (character.owner != attrs["owner"]):
+            errors["wrong_owner"] = "Current user is not the owner of given character with id " + character.owner
+
+        if errors.__len__() > 0:
+            raise serializers.ValidationError(errors)
+
+        return attrs

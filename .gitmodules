@@ -1,0 +1,3 @@
+[submodule "api/ml"]
+	path = api/ml
+	url = https://github.com/aw31n/ml-fashion-example

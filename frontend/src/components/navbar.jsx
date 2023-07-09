@@ -11,7 +11,7 @@ export default function NavBar(props) {
     const user = useAuthStore((state) => state.user)
     const state = useAuthStore((state) => state)
 
-    
+
     return (
         <nav className="bg-[#111111] border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-navbar h-min w-full fixed z-10">
             <div className="container flex flex-wrap items-center justify-between mx-auto">
@@ -26,11 +26,9 @@ export default function NavBar(props) {
                 </button>
                 <div className="hidden w-full md:block md:w-auto" id="mobile-menu">
                     <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+
                         <li>
                             <a onClick={() => navigate("/")} className="cursor-pointer block py-2 pl-3 pr-4 text-navbar rounded md:bg-transparent hover:text-navbar-hover md:p-0 dark:text-navbar" aria-current="page">Home</a>
-                        </li>
-                        <li>
-                            <a onClick={() => navigate("/about")} className="cursor-pointer block py-2 pl-3 pr-4 text-navbar border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-navbar-hover md:p-0 dark:text-gray-400 md:dark:hover:text-navbar dark:hover:bg-gray-700 dark:hover:text-navbar md:dark:hover:bg-transparent dark:border-gray-700">About</a>
                         </li>
 
                         {isLoggedIn() &&
@@ -38,9 +36,13 @@ export default function NavBar(props) {
                                 <a onClick={() => navigate("/app")} className="cursor-pointer block py-2 pl-3 pr-4 text-navbar border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-navbar-hover md:p-0 dark:text-gray-400 md:dark:hover:text-navbar dark:hover:bg-gray-700 dark:hover:text-navbar md:dark:hover:bg-transparent dark:border-gray-700">App</a>
                             </li>
                         }
+                        <li>
+                            <a onClick={() => navigate("/mnist")} className="cursor-pointer block py-2 pl-3 pr-4 text-navbar border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-navbar-hover md:p-0 dark:text-gray-400 md:dark:hover:text-navbar dark:hover:bg-gray-700 dark:hover:text-navbar md:dark:hover:bg-transparent dark:border-gray-700">MNIST</a>
+                        </li>
+
                         {isLoggedIn() &&
                             <li className="justify-center items-center text-red-600">
-                               {user()?.email}
+                                {user()?.email}
                             </li>
                         }
 

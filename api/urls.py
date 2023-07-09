@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import (
 
 router = routers.DefaultRouter()
 router.register(r'characters', views.CharacterViewSet, basename='characters')
+router.register(r'character_images', views.CharacterImageViewSet, basename='character_images')
 
 urlpatterns =   [
   
@@ -18,6 +19,8 @@ urlpatterns =   [
     re_path(r'test/?', views.testEndPoint),
     path("openai/story/", views.create_story),
     path("openai/image/", views.create_image),
+    path("mnist/get_image/", views.get_mnist_image),
+    path("mnist/classify_image/", views.classify_mnist_image),
     # re_path(r'characters/?', views.characters_list),
 
     # path('ping', views.ping),

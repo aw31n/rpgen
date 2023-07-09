@@ -51,7 +51,7 @@ class CharacterImage(models.Model):
         Character,
         on_delete=models.CASCADE,
     )
-    filename = models.CharField(max_length=60)
+    filename = models.CharField(max_length=60, null=False, blank=False)
     prompt = models.TextField(default='', null=True, blank=True)
     created = models.DateTimeField(auto_now_add= True)
 

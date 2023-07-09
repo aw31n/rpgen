@@ -30,5 +30,4 @@ class UserAdmin(UserAdmin):
 
 admin.site.register(Character)
 admin.site.register(CharacterImage)
-
 admin.site.register(User, UserAdmin)

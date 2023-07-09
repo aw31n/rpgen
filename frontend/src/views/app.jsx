@@ -5,6 +5,9 @@ import TabContext from '@mui/lab/TabContext';
 import Character from '../models/Character';
 import { enqueueSnackbar } from 'notistack';
 import { TabList, TabPanel } from '@mui/lab';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
+import { useAuthStore } from '../store/auth';
 
 const App = () => {
     const api = useAxios();
@@ -12,10 +15,16 @@ const App = () => {
     const [currentCharacter, setCurrentCharacter] = useState(new Character({}))
     const [loading, setLoading] = useState(false)
     const [selectedTab, setSelectedTab] = useState("details")
+    const [characterImages, setCharacterImages] = useState([])
 
     useEffect(() => {
         refreshCharacters()
     }, [])
+
+    useEffect(() => {
+        refreshGallery()
+    }, [currentCharacter])
+
 
     const refreshCharacters = async () => {
         setLoading(true)
@@ -23,12 +32,25 @@ const App = () => {
         setLoading(false)
     }
 
+    const refreshGallery = async (e) => {
+        e && e.preventDefault()
+        if (!currentCharacter?.id)
+            return;
+        setLoading(true)
+        let result = await api.get("character_images/?" + new URLSearchParams({ "character_id": currentCharacter.id }).toString())
+        setCharacterImages(result.data)
+        setLoading(false)
+    }
+
+
     const handleTabChange = (e, index) => {
         setSelectedTab(index)
     }
 
     const handleCharacterItemClick = (event, character) => {
+        setCharacterImages([])
         setCurrentCharacter(new Character(character))
+        refreshGallery()
     }
 
     const handleRaceChange = (event) => {
@@ -90,6 +112,13 @@ const App = () => {
         setCurrentCharacter(new Character({ ...currentCharacter, prompt: value }))
     };
 
+    const handleImagePromptChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setCurrentCharacter(new Character({ ...currentCharacter, image_prompt: value }))
+    };
+
 
 
     const saveCharacter = async (e) => {
@@ -110,19 +139,62 @@ const App = () => {
 
     const createPrompt = async (e) => {
         e.preventDefault();
-        let prompt = currentCharacter.createStoryPrompt()
-        setCurrentCharacter(new Character({ ...currentCharacter, prompt: prompt }))
-        console.log(prompt)
+        try {
+            let prompt = currentCharacter.createStoryPrompt()
+
+            setCurrentCharacter(new Character({ ...currentCharacter, prompt: prompt }))
+            console.log(prompt)
+        }
+        catch (e) {
+            enqueueSnackbar(e, { variant: "error" })
+        }
+    }
+
+    const createImagePrompt = async (e) => {
+        e.preventDefault();
+        try {
+            let prompt = currentCharacter.createImagePrompt()
+            setCurrentCharacter(new Character({ ...currentCharacter, image_prompt: prompt }))
+            console.log(prompt)
+
+        }
+        catch (e) {
+            enqueueSnackbar(e, { variant: "error" })
+        }
     }
 
     const createStory = async (e) => {
         e.preventDefault();
-        let prompt = currentCharacter.createStoryPrompt()
+        let prompt = currentCharacter.prompt
         setLoading(true)
-        let story = await currentCharacter.createStory(prompt)
+        try {
+            let story = await currentCharacter.createStory(prompt)
+            console.log(story)
+            setCurrentCharacter(new Character({ ...currentCharacter, story: story }))
+        }
+        catch (e) {
+            enqueueSnackbar(e, { variant: "error" })
+        }
         setLoading(false)
-        console.log(story)
-        setCurrentCharacter(new Character({ ...currentCharacter, story: story }))
+
+    }
+
+    const createImage = async (e) => {
+        e.preventDefault();
+        let prompt = currentCharacter.image_prompt
+        setLoading(true)
+        try {
+            let image = await currentCharacter.createImage(prompt)
+            refreshGallery()
+            console.log(image)
+
+        }
+        catch (e) {
+            console.error(e)
+            enqueueSnackbar(e, { variant: "error" })
+        }
+
+        setLoading(false)
     }
 
     return (
@@ -141,7 +213,12 @@ const App = () => {
                                             <ListItemText primary={item.name} />
                                         </ListItemButton>
                                     })}
-
+                                    <ListItemButton style={{ color: "white", backgroundColor: "green", padding: "5px" }} key="new-character" onClick={(event) => {
+                                        setCurrentCharacter(new Character())
+                                        setCharacterImages([])
+                                    }}>
+                                        <ListItemText primary="Create new Character" />
+                                    </ListItemButton>
                                 </List>
                             </Box>
                         </div>
@@ -280,7 +357,7 @@ const App = () => {
                                         </div>
                                     </TabPanel>
                                     <TabPanel value="story">
-                                        <form onSubmit={saveCharacter} className="max-w-[600px] min-w-[60%]  p-5">
+                                        <form onSubmit={saveCharacter} className="max-w-[1200px] min-w-[60%]  p-5">
                                             <div className="flex flex-col space-y-4">
                                                 <div className="flex flex-col space-y-4">
                                                     <div>
@@ -299,7 +376,7 @@ const App = () => {
                                                             id="story"
                                                             label="Story"
                                                             multiline
-                                                            rows={8}
+                                                            rows={18}
                                                             fullWidth
                                                             value={currentCharacter.story}
                                                             onChange={handleStoryChange}
@@ -313,7 +390,45 @@ const App = () => {
                                             </div>
                                         </form>
                                     </TabPanel>
-                                    <TabPanel value="images">Item Three</TabPanel>
+                                    <TabPanel value="images">
+                                        <form onSubmit={saveCharacter} className="max-w-[1200px] min-w-[60%]  p-5">
+                                            <div className="flex flex-col space-y-4">
+                                                <div className="flex flex-col space-y-4">
+                                                    <div>
+                                                        <TextField
+                                                            style={{ marginBottom: "10px" }}
+                                                            id="image_prompt"
+                                                            label="Prompt"
+                                                            multiline
+                                                            rows={4}
+                                                            fullWidth
+                                                            value={currentCharacter.image_prompt}
+                                                            onChange={handleImagePromptChange}
+                                                        />
+                                                    </div>
+                                                    <button type="submit" className="text-black hover:text-black bg-slate-200 hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Save</button>
+                                                    <button onClick={createImagePrompt} className="text-black hover:text-black bg-slate-200 hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create Prompt</button>
+                                                    <button onClick={createImage} className="text-black hover:text-black bg-slate-200 hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create Image</button>
+                                                    <button onClick={refreshGallery} className="text-black hover:text-black bg-slate-200 hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Refresh Gallery</button>
+                                                </div>
+                                                <div className="flex flex-1 justify-center bg-red-200" >
+                                                    <Carousel dynamicHeight={false} styöe={{ height: "500px" }} onClickItem={(index, item) => { window.open("http://127.0.0.1:8000/images/generated/" + useAuthStore.getState().user().user_id + "/" + characterImages[index].filename) }}>
+                                                        {
+                                                            characterImages.map((image) => {
+                                                                let path = "http://127.0.0.1:8000/images/generated/" + useAuthStore.getState().user().user_id + "/" + image.filename
+                                                                return (
+                                                                    <div key={"image-" + image.id} title="Open in new tab">
+                                                                        <img style={{ objectFit: "cover" }} src={path} />
+                                                                        <p className="legend">{image.prompt}</p>
+                                                                    </div>
+                                                                )
+                                                            })}
+
+                                                    </Carousel>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </TabPanel>
                                 </TabContext>
                             </div>
 
