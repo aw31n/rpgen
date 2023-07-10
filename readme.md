@@ -6,7 +6,8 @@ git clone --recurse-submodules https://github.com/aw31n/rpgen
 
 ### Conda / ML
 
-Conda is needed for the machine learning part. You need to create a new conda environment and install some packages for PyTorch.
+Conda is needed for the machine learning part. You need to create a new conda environment and install some packages for PyTorch.  
+Start an Anaconda Prompt and run the following:
 
 ```
 conda create --name ml Python=3.10.11
@@ -18,6 +19,14 @@ conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit
 # or without:
 conda install pytorch torchvision torchaudio -c pytorch
 ```
+
+Now start VSCode from inside the Anaconda prompt:
+
+```
+code .
+```
+
+Run all following commands from the VSCode Terminal.
 
 I added [my ML-Repo](https://github.com/aw31n/ml-fashion-example`) as a submodule in /api/ml.
 Change into the subfolder and run the script to download the dataset and train the model.
@@ -44,7 +53,7 @@ Run database migrations
 python .\manage.py migrate 
 ```
 
-Create a superuser (optional)
+Create a superuser
 ```
 python manage.py createsuperuser
 # follow the steps on screen
@@ -71,6 +80,9 @@ In another terminal run tailwind:
 ```
 yarn run tailwind # or npm run tailwind
 ```
+
+If you made it this far, you should be able to open [http://127.0.0.1:8000](http://127.0.0.1:8000/)  
+Congratulations!
 
 ## URLs
 

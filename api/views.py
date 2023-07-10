@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 from rest_framework import generics, status, generics
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -24,7 +25,7 @@ from matplotlib import image
 import numpy as np
 from django.core.files.base import ContentFile
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
 openai.api_key = OPENAI_API_KEY
 
 
@@ -109,6 +110,8 @@ def characters_list(request):
 @permission_classes([IsAuthenticated])
 def create_story(request):
 
+    print(request.user)
+
     if request.method != 'POST':
         return JsonResponse({"detail": request.method + " is not supported"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -131,6 +134,7 @@ def create_story(request):
 @permission_classes([IsAuthenticated])
 def create_image(request):
 
+    print(request.user)
     params = dict(request.POST)
     if ("character_id" not in params):
         return JsonResponse({"detail": "Param 'character_id' is mandatory"}, status=status.HTTP_400_BAD_REQUEST)
@@ -144,7 +148,7 @@ def create_image(request):
     
     
     DATA_DIR = Path.cwd() / f"frontend/static/images/generated/{character.owner.id}"
-    DATA_DIR.mkdir(exist_ok=True)
+    os.makedirs(DATA_DIR, exist_ok=True)
 
     prompt = params["prompt"][0]
    
