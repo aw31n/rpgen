@@ -25,7 +25,7 @@ from matplotlib import image
 import numpy as np
 from django.core.files.base import ContentFile
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = ""
 openai.api_key = OPENAI_API_KEY
 
 
