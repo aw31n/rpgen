@@ -4,6 +4,9 @@
 
 git clone --recurse-submodules https://github.com/aw31n/rpgen
 
+Edit `api/views.py` and add your OpenAI-API-Key. I commited mine, but shortly after it was blocked since it leaked from GitHub.  
+Scrapers are working fast and nonstop, it seems...
+
 ### Conda / ML
 
 Conda is needed for the machine learning part. You need to create a new conda environment and install some packages for PyTorch.  
