@@ -80,7 +80,7 @@ body {
   }
 
   .carousel .slide img {
-    max-height: 600px;  /* change this to whatever you want */
+    max-height: 300px;  /* change this to whatever you want */
     width: auto;
 }
 
@@ -93,3 +93,5 @@ ul.thumbs {
 li.slide.selected {
   cursor: pointer;
 }
+
+

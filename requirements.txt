@@ -4,7 +4,7 @@ djangorestframework
 django-extensions
 djangorestframework-simplejwt
 openai
-
+matplotlib
 
 # pip freeze - output
 # 

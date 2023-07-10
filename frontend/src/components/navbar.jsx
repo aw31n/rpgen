@@ -15,7 +15,7 @@ export default function NavBar(props) {
     return (
         <nav className="bg-[#111111] border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-navbar h-min w-full fixed z-10">
             <div className="container flex flex-wrap items-center justify-between mx-auto">
-                <a href="{{ .Site.Params.homepage }}/" className="flex items-center">
+                <a href="/" className="flex items-center">
                     <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
                     <span className="self-center text-xl font-semibold whitespace-nowrap text-navbar">RPGen.ai</span>
                 </a>

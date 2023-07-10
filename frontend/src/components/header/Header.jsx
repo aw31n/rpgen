@@ -1,5 +1,5 @@
 import React from 'react';
-import wizard from '../../../static/images/elf_wizard_transparent.png';
+import wizard from '../../images/elf_wizard_transparent.png';
 import './header.css';
 import { Button } from '@mui/material';
 import { useAuthStore } from '../../store/auth';
